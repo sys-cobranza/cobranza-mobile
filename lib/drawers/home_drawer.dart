@@ -36,8 +36,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
       DrawerList(
         index: DrawerIndex.Help,
         labelName: 'Help',
-        isAssetsImage: true,
-        imageName: 'assets/images/userImage.png',
+        icon: Icon(Icons.help),
       ),
       DrawerList(
         index: DrawerIndex.FeedBack,
@@ -72,12 +71,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
         children: <Widget>[
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.only(top: 40.0),
+            padding: const EdgeInsets.only(top: 15.0),
             child: Container(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   AnimatedBuilder(
                     animation: widget.iconAnimationController,
@@ -116,13 +115,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     },
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 4),
+                    padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       'Usuario Cobranza',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: AppTheme.grey,
-                        fontSize: 18,
+                        fontSize: 14,
                       ),
                     ),
                   ),
@@ -130,9 +129,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 4,
-          ),
+          const SizedBox(    ),
           Divider(
             height: 1,
             color: AppTheme.grey.withOpacity(0.6),
@@ -159,7 +156,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   style: TextStyle(
                     fontFamily: AppTheme.fontName,
                     fontWeight: FontWeight.w600,
-                    fontSize: 16,
+                    fontSize: 14,
                     color: AppTheme.darkText,
                   ),
                   textAlign: TextAlign.left,
@@ -192,26 +189,26 @@ class _HomeDrawerState extends State<HomeDrawer> {
         child: Stack(
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+              padding: const EdgeInsets.only(top: 8.0),
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: 6.0,
+                    width: 10.0,
                     height: 46.0,
-                    // decoration: BoxDecoration(
-                    //   color: widget.screenIndex == listData.index
-                    //       ? Colors.blue
-                    //       : Colors.transparent,
-                    //   borderRadius: new BorderRadius.only(
-                    //     topLeft: Radius.circular(0),
-                    //     topRight: Radius.circular(16),
-                    //     bottomLeft: Radius.circular(0),
-                    //     bottomRight: Radius.circular(16),
-                    //   ),
-                    // ),
+                     decoration: BoxDecoration(
+                       color: widget.screenIndex == listData.index
+                           ? Colors.blue
+                           : Colors.transparent,
+                       borderRadius: new BorderRadius.only(
+                         topLeft: Radius.circular(0),
+                         topRight: Radius.circular(20),
+                         bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(20),
+                       ),
+                    ),
                   ),
                   const Padding(
-                    padding: EdgeInsets.all(4.0),
+                    padding: EdgeInsets.all(3.0),
                   ),
                   listData.isAssetsImage
                       ? Container(
@@ -233,7 +230,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     listData.labelName,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 16,
+                      fontSize: 12,
                       color: widget.screenIndex == listData.index
                           ? Colors.blue
                           : AppTheme.nearlyBlack,
@@ -258,16 +255,15 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         child: Padding(
                           padding: EdgeInsets.only(top: 8, bottom: 8),
                           child: Container(
-                            width:
-                                MediaQuery.of(context).size.width * 0.75 - 64,
+                            width:                                MediaQuery.of(context).size.width,
                             height: 46,
                             decoration: BoxDecoration(
                               color: Colors.blue.withOpacity(0.2),
                               borderRadius: new BorderRadius.only(
                                 topLeft: Radius.circular(0),
-                                topRight: Radius.circular(28),
+                                topRight: Radius.circular(15),
                                 bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(28),
+                                bottomRight: Radius.circular(15),
                               ),
                             ),
                           ),

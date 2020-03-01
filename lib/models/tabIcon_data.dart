@@ -25,25 +25,25 @@ class TabIconData {
       animationController: null,
     ),
     TabIconData(
-      imagePath: 'assets/cobranza/tab_2.png',
-      selectedImagePath: 'assets/cobranza/tab_2s.png',
+      imagePath: 'assets/cobranza/tab_4.png',
+      selectedImagePath: 'assets/cobranza/tab_4s.png',
       index: 1,
       isSelected: false,
       animationController: null,
     ),
     TabIconData(
+      imagePath: 'assets/cobranza/tab_2.png',
+      selectedImagePath: 'assets/cobranza/tab_2s.png',
+      index: 2,
+      isSelected: false,
+      animationController: null,
+    ),
+    /*   TabIconData(
       imagePath: 'assets/cobranza/tab_3.png',
       selectedImagePath: 'assets/cobranza/tab_3s.png',
       index: 2,
       isSelected: false,
       animationController: null,
-    ),
-    TabIconData(
-      imagePath: 'assets/cobranza/tab_4.png',
-      selectedImagePath: 'assets/cobranza/tab_4s.png',
-      index: 3,
-      isSelected: false,
-      animationController: null,
-    ),
+    ),*/
   ];
 }

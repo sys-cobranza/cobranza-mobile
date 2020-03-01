@@ -1,13 +1,11 @@
 import 'dart:math' as math;
 
-import 'package:cobranza/themes/cobranza_theme.dart';
-import 'package:cobranza/views/cobranza_view.dart';
 import 'package:cobranza/models/tabIcon_data.dart';
+import 'package:cobranza/themes/cobranza_theme.dart';
 import 'package:flutter/material.dart';
 
 class BottomBarView extends StatefulWidget {
-  const BottomBarView(
-      {Key key, this.tabIconsList, this.changeIndex, this.addClick})
+  BottomBarView({Key key, this.tabIconsList, this.changeIndex, this.addClick})
       : super(key: key);
 
   final Function(int index) changeIndex;
@@ -26,7 +24,7 @@ class _BottomBarViewState extends State<BottomBarView>
   void initState() {
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 1000),
     );
     animationController.forward();
     super.initState();
@@ -43,22 +41,21 @@ class _BottomBarViewState extends State<BottomBarView>
             return Transform(
               transform: Matrix4.translationValues(0.0, 0.0, 0.0),
               child: PhysicalShape(
-                color: CobranzaTheme.white,
-                elevation: 16.0,
+                color: Theme.of(context).primaryColor,
+                elevation: 0.0,
                 clipper: TabClipper(
                     radius: Tween<double>(begin: 0.0, end: 1.0)
                             .animate(CurvedAnimation(
                                 parent: animationController,
                                 curve: Curves.fastOutSlowIn))
                             .value *
-                        38.0),
+                        32.0),
                 child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: 62,
+                      height: 50,
                       child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 8, right: 8, top: 4),
+                        padding: EdgeInsets.only(left: 8, right: 8, top: 4),
                         child: Row(
                           children: <Widget>[
                             Expanded(
@@ -79,32 +76,6 @@ class _BottomBarViewState extends State<BottomBarView>
                                     widget.changeIndex(1);
                                   }),
                             ),
-                            SizedBox(
-                              width: Tween<double>(begin: 0.0, end: 1.0)
-                                      .animate(CurvedAnimation(
-                                          parent: animationController,
-                                          curve: Curves.fastOutSlowIn))
-                                      .value *
-                                  64.0,
-                            ),
-                            Expanded(
-                              child: TabIcons(
-                                  tabIconData: widget.tabIconsList[2],
-                                  removeAllSelect: () {
-                                    setRemoveAllSelection(
-                                        widget.tabIconsList[2]);
-                                    widget.changeIndex(2);
-                                  }),
-                            ),
-                            Expanded(
-                              child: TabIcons(
-                                  tabIconData: widget.tabIconsList[3],
-                                  removeAllSelect: () {
-                                    setRemoveAllSelection(
-                                        widget.tabIconsList[3]);
-                                    widget.changeIndex(3);
-                                  }),
-                            ),
                           ],
                         ),
                       ),
@@ -122,8 +93,8 @@ class _BottomBarViewState extends State<BottomBarView>
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
           child: SizedBox(
-            width: 38 * 2.0,
-            height: 38 + 62.0,
+            width: 38 * 2.1,
+            height: 38 + 50.0,
             child: Container(
               alignment: Alignment.topCenter,
               color: Colors.transparent,
@@ -131,7 +102,7 @@ class _BottomBarViewState extends State<BottomBarView>
                 width: 38 * 2.0,
                 height: 38 * 2.0,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: ScaleTransition(
                     alignment: Alignment.center,
                     scale: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -141,20 +112,21 @@ class _BottomBarViewState extends State<BottomBarView>
                     child: Container(
                       // alignment: Alignment.center,s
                       decoration: BoxDecoration(
-                        color: CobranzaTheme.nearlyDarkBlue,
+                        color: Theme.of(context).primaryColor,
                         gradient: LinearGradient(
                             colors: [
-                              CobranzaTheme.nearlyDarkBlue,
-                              HexColor('#6A88E5'),
+                              Theme.of(context).primaryColor,
+                              Theme.of(context).primaryColor,
+                              Theme.of(context).primaryColor
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight),
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: CobranzaTheme.nearlyDarkBlue
-                                  .withOpacity(0.4),
-                              offset: const Offset(8.0, 16.0),
+                              color:
+                              Theme.of(context).primaryColor.withOpacity(0.4),
+                              offset: Offset(8.0, 16.0),
                               blurRadius: 16.0),
                         ],
                       ),
@@ -165,13 +137,16 @@ class _BottomBarViewState extends State<BottomBarView>
                           highlightColor: Colors.transparent,
                           focusColor: Colors.transparent,
                           onTap: () {
+
                             widget.addClick();
                           },
-                          child: Icon(
-                            Icons.add,
-                            color: CobranzaTheme.white,
-                            size: 32,
-                          ),
+                          child: TabIcons(
+                              tabIconData: widget.tabIconsList[2],
+                              removeAllSelect: () {
+                                setRemoveAllSelection(
+                                    widget.tabIconsList[2]);
+                                widget.changeIndex(2);
+                              }),
                         ),
                       ),
                     ),
@@ -186,7 +161,7 @@ class _BottomBarViewState extends State<BottomBarView>
   }
 
   void setRemoveAllSelection(TabIconData tabIconData) {
-    if (!mounted) return;
+   if (!mounted) return;
     setState(() {
       widget.tabIconsList.forEach((TabIconData tab) {
         tab.isSelected = false;
@@ -199,8 +174,7 @@ class _BottomBarViewState extends State<BottomBarView>
 }
 
 class TabIcons extends StatefulWidget {
-  const TabIcons({Key key, this.tabIconData, this.removeAllSelect})
-      : super(key: key);
+  TabIcons({Key key, this.tabIconData, this.removeAllSelect}) : super(key: key);
 
   final TabIconData tabIconData;
   final Function removeAllSelect;
@@ -214,7 +188,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
   void initState() {
     widget.tabIconData.animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 400),
     )..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           if (!mounted) return;
@@ -274,7 +248,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: CobranzaTheme.nearlyDarkBlue,
+                        color: Theme.of(context).primaryColor,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -295,7 +269,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 4,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: CobranzaTheme.nearlyDarkBlue,
+                        color: Theme.of(context).primaryColor,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -316,7 +290,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 6,
                       height: 6,
                       decoration: BoxDecoration(
-                        color: CobranzaTheme.nearlyDarkBlue,
+                        color: Theme.of(context).primaryColor,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -332,7 +306,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
 }
 
 class TabClipper extends CustomClipper<Path> {
-  TabClipper({this.radius = 38.0});
+  TabClipper({this.radius = 20.0});
 
   final double radius;
 

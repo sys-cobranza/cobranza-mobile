@@ -1,6 +1,11 @@
 import 'package:cobranza/clippers/login_clippers.dart';
-import 'package:cobranza/screens/navigation_screen.dart';
+import 'package:cobranza/models/provide/user_provide.dart';
+import 'package:cobranza/models/repository/user_repository.dart';
+import 'package:cobranza/screens/home_screen.dart';
+import 'package:cobranza/utils/sp_util.dart';
+import 'package:cobranza/utils/util.dart';
 import 'package:flutter/material.dart';
+import 'package:provide/provide.dart';
 
 class LoginPage extends StatefulWidget {
   static const ROUTE_NAME = "/login";
@@ -13,8 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   GlobalKey<FormState> _loginFormKey = new GlobalKey();
   FocusNode _passwordFocusNode, _loginFocusNode;
   bool _isShowPassWord = false;
-  String _username = 'app';
-  String _password = '123456';
+  String _username = '';
+  String _password = '';
   bool _isLoading = false;
 
   @override
@@ -36,23 +41,27 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
 
-/*    UserBiz.login(_username, _password).then((userEntity) async {
-      if(userEntity != null ) {
-        Navigator.of(context).pushReplacementNamed(HomePage.ROUTE_NAME);
+    //Antes de iniciar sesión, elimine la información de inicio de sesión guardada anteriormente.
+    SpUtil.logout();
+    UserRepository.login(_username, _password).then((userEntity) async {
+      print(userEntity);
+      if (userEntity != null) {
+        Provide.value<UserProvide>(context).updateUser(userEntity);
+        Navigator.of(context).pushReplacementNamed(HomeScreen.ROUTE_NAME);
       } else {
-        throw Exception("Error！");
+        throw Exception("Error al obtener información del usuario！");
       }
     }).catchError((e) {
-
+      Util.showToast('Inicio de sesión fallido：${e.toString()}');
     }).whenComplete(() {
-      if(mounted) {
+      if (mounted) {
         setState(() {
           _isLoading = false;
         });
       }
-    });*/
-    Navigator.of(context).pushReplacementNamed(NavigationScreen.ROUTE_NAME);
-    _isLoading = false;
+    });
+    /* Navigator.of(context).pushReplacementNamed(HomeScreen.ROUTE_NAME);
+    _isLoading = false;*/
   }
 
   @override
@@ -136,7 +145,6 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 30,
           ),
-
           Form(
             key: _loginFormKey,
             child: Column(

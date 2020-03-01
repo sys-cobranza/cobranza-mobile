@@ -1,8 +1,16 @@
 import 'dart:async';
 
-import 'package:cobranza/themes/app_theme.dart';
+import 'package:cobranza/models/entity/user_entity.dart';
+import 'package:cobranza/models/provide/theme_provide.dart';
+import 'package:cobranza/models/provide/user_provide.dart';
+import 'package:cobranza/models/repository/user_repository.dart';
+import 'package:cobranza/screens/home_screen.dart';
 import 'package:cobranza/screens/login_screen.dart';
+import 'package:cobranza/themes/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:provide/provide.dart';
 
 class SplashPage extends StatefulWidget {
   static const ROUTE_NAME = "/splash";
@@ -17,14 +25,13 @@ class _SplashPageState extends State<SplashPage> {
   Timer timer;
 
   Future hasLogin() async {
-    /*UserEntity userEntity = await UserBiz.getUser();
+    UserEntity userEntity = await UserRepository.getUser();
     if (userEntity != null) {
       Provide.value<UserProvide>(context).updateUser(userEntity);
-      Navigator.of(context).pushReplacementNamed(HomePage.ROUTE_NAME);
+      Navigator.of(context).pushReplacementNamed(HomeScreen.ROUTE_NAME);
     } else {
       Navigator.of(context).pushReplacementNamed(LoginPage.ROUTE_NAME);
-    }*/
-    Navigator.of(context).pushReplacementNamed(LoginPage.ROUTE_NAME);
+    }
   }
 
   @override
@@ -44,6 +51,9 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        Provide.value<ThemeProvide>(context).overlayStyle);
+    FlutterStatusbarcolor.setStatusBarColor(Theme.of(context).primaryColor);
     return Scaffold(
       body: Container(
         child: Stack(
@@ -57,7 +67,7 @@ class _SplashPageState extends State<SplashPage> {
                     ? TextStyle(
                         fontSize: 48,
                         fontWeight: FontWeight.w900,
-                        color: Theme.of(context).primaryColorDark)
+                        color: Theme.of(context).primaryColor)
                     : TextStyle(
                         fontFamily: AppTheme.fontName,
                         fontSize: 36,

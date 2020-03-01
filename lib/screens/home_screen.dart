@@ -1,268 +1,191 @@
-import 'package:cobranza/themes/cobranza_theme.dart';
-import 'package:cobranza/views/cobranza_view.dart';
-import 'package:cobranza/models/venta_data.dart';
+import 'package:cobranza/models/provide/i18n.dart';
+import 'package:cobranza/models/tabIcon_data.dart';
+import 'package:cobranza/screens/card_screen.dart';
+import 'package:cobranza/screens/cliente_screen.dart';
+import 'package:cobranza/screens/cobranza_screen.dart';
+import 'package:cobranza/screens/configuracion_screen.dart';
+import 'package:cobranza/screens/perfil_screen.dart';
+import 'package:cobranza/views/bottom_bar_view.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key, this.animationController}) : super(key: key);
-
-  final AnimationController animationController;
+  static const ROUTE_NAME = "/home";
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with TickerProviderStateMixin {
-  Animation<double> topBarAnimation;
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  AnimationController animationController;
 
-  List<Widget> listViews = <Widget>[];
-  final ScrollController scrollController = ScrollController();
-  double topBarOpacity = 0.0;
+  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+
+  Widget tabBody = Container(
+    color: Colors.transparent,
+  );
 
   @override
   void initState() {
-    topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-            parent: widget.animationController,
-            curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-    addAllListData();
-
-    scrollController.addListener(() {
-      if (scrollController.offset >= 24) {
-        if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-          });
-        }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
-        if (topBarOpacity != scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = scrollController.offset / 24;
-          });
-        }
-      } else if (scrollController.offset <= 0) {
-        if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-          });
-        }
-      }
+    tabIconsList.forEach((TabIconData tab) {
+      tab.isSelected = false;
     });
+    tabIconsList[0].isSelected = true;
+
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 600), vsync: this);
+    tabBody = CobranzaScreen(/*animationController: animationController*/);
     super.initState();
   }
 
-  void addAllListData() {
-    const int count = 9;
-
-/*    listViews.add(
-      TitleView(
-        titleTxt: 'Mediterranean diet',
-        subTxt: 'Details',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );*/
-    List<CobranzaData> data = CobranzaData.tabIconsList;
-
-    data.forEach((CobranzaData data) {
-      listViews.add(
-        CobranzaView(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                  parent: widget.animationController,
-                  curve: Interval((1 / count) * 1, 1.0,
-                      curve: Curves.fastOutSlowIn))),
-          animationController: widget.animationController,
-          data: data,
-        ),
-      );
-    });
-  }
-
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-    return true;
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: CobranzaTheme.background,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: <Widget>[
-            getMainListViewUI(),
-            getAppBarUI(),
-            SizedBox(
-              height: MediaQuery.of(context).padding.bottom,
-            )
-          ],
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
+      appBar: appBar(),
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Theme.of(context).primaryColor,
+              Theme.of(context).primaryColor
+            ])),
+        child: FutureBuilder<bool>(
+          future: getData(),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (!snapshot.hasData) {
+              return const SizedBox();
+            } else {
+              return Stack(
+                children: <Widget>[
+                  tabBody,
+                  bottomBar(),
+                ],
+              );
+            }
+          },
         ),
       ),
     );
   }
 
-  Widget getMainListViewUI() {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
-          return ListView.builder(
-            controller: scrollController,
-            padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
-            ),
-            itemCount: listViews.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) {
-              widget.animationController.forward();
-              return listViews[index];
-            },
-          );
-        }
-      },
-    );
+  Future<bool> getData() async {
+    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
+    return true;
   }
 
-  Widget getAppBarUI() {
-    String today = new DateFormat("d MMMM").format(new DateTime.now());
-    return Column(
-      children: <Widget>[
-        AnimatedBuilder(
-          animation: widget.animationController,
-          builder: (BuildContext context, Widget child) {
-            return FadeTransition(
-              opacity: topBarAnimation,
-              child: Transform(
-                transform: Matrix4.translationValues(
-                    0.0, 30 * (1.0 - topBarAnimation.value), 0.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: CobranzaTheme.white.withOpacity(topBarOpacity),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(32.0),
-                    ),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: CobranzaTheme.grey
-                              .withOpacity(0.4 * topBarOpacity),
-                          offset: const Offset(1.1, 1.1),
-                          blurRadius: 10.0),
-                    ],
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: MediaQuery.of(context).padding.top,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 16,
-                            right: 16,
-                            top: 16 - 8.0 * topBarOpacity,
-                            bottom: 12 - 8.0 * topBarOpacity),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Cobranza',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: CobranzaTheme.fontName,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 22 - 6 * topBarOpacity,
-                                    letterSpacing: 1,
-                                    color: CobranzaTheme.darkerText,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 38,
-                              width: 38,
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0)),
-                                onTap: () {},
-                                child: Center(
-                                  child: Icon(
-                                    Icons.keyboard_arrow_left,
-                                    color: CobranzaTheme.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 8,
-                                right: 8,
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: Icon(
-                                      Icons.calendar_today,
-                                      color: CobranzaTheme.grey,
-                                      size: 18,
-                                    ),
-                                  ),
-                                  Text(
-                                    today,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      fontFamily: CobranzaTheme.fontName,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 18,
-                                      letterSpacing: -0.2,
-                                      color: CobranzaTheme.darkerText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 38,
-                              width: 38,
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0)),
-                                onTap: () {},
-                                child: Center(
-                                  child: Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: CobranzaTheme.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+  AppBar appBar() {
+    return AppBar(
+      leading: Icon(
+        Icons.account_balance,
+        color: Theme.of(context).primaryColorLight,
+      ),
+      title: Text(
+        "Cobranza",
+        style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 24,
+            color: Theme.of(context).primaryColorLight),
+      ),
+      centerTitle: true,
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.settings),
+          color: Theme.of(context).primaryColorLight,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ConfiguracionScreen(),
+                fullscreenDialog: false,
               ),
             );
           },
-        )
+        ),
+
+        InkWell(
+          borderRadius: BorderRadius.circular(25),
+          child: CircleAvatar(
+            radius: 17,
+            backgroundColor: Theme.of(context).primaryColorLight,
+            child: ClipOval(
+              child: Image.asset(
+                "assets/images/if_1_avatar_2754574.png",
+                fit: BoxFit.contain,
+                scale: 2.2,
+              ),
+            ),
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PerfilScreen(),
+                fullscreenDialog: false,
+              ),
+            );
+          },
+        ),
+        SizedBox(
+          width: 10,
+        ),
+      ],
+      backgroundColor: Colors.transparent,
+      elevation: 0.0,
+    );
+  }
+
+  Widget bottomBar() {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: SizedBox(),
+        ),
+        BottomBarView(
+          tabIconsList: tabIconsList,
+          addClick: () {},
+          changeIndex: (int index) {
+            if (index == 0) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = CobranzaScreen(
+                      /*animationController: animationController*/);
+                });
+              });
+            } else if (index == 1) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      CardScreen(/*animationController: animationController*/);
+                });
+              });
+            } else if (index == 2) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = ClienteScreen(
+                      /*animationController: animationController*/);
+                });
+              });
+            }
+          },
+        ),
       ],
     );
   }

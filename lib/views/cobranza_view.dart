@@ -24,8 +24,7 @@ class CobranzaView extends StatelessWidget {
             transform: new Matrix4.translationValues(
                 0.0, 30 * (1.0 - animation.value), 0.0),
             child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 24, right: 24, top: 16, bottom: 18),
+              padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
               child: Container(
                 decoration: BoxDecoration(
                   color: CobranzaTheme.white,
@@ -33,7 +32,7 @@ class CobranzaView extends StatelessWidget {
                       topLeft: Radius.circular(8.0),
                       bottomLeft: Radius.circular(8.0),
                       bottomRight: Radius.circular(8.0),
-                      topRight: Radius.circular(68.0)),
+                      topRight: Radius.circular(50.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                         color: CobranzaTheme.grey.withOpacity(0.2),
@@ -109,13 +108,13 @@ class CobranzaView extends StatelessWidget {
                                                           left: 4, bottom: 3),
                                                   child: Text(
                                                     data.totalDeuda != null
-                                                        ? data.totalDeuda.toString()
+                                                        ? data.totalDeuda
+                                                            .toString()
                                                         : '0',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                      fontFamily:
-                                                          CobranzaTheme
-                                                              .fontName,
+                                                      fontFamily: CobranzaTheme
+                                                          .fontName,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       fontSize: 16,
@@ -186,13 +185,13 @@ class CobranzaView extends StatelessWidget {
                                                           left: 4, bottom: 3),
                                                   child: Text(
                                                     data.totalCobrado != null
-                                                        ? data.totalCobrado.toString()
+                                                        ? data.totalCobrado
+                                                            .toString()
                                                         : '0',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                      fontFamily:
-                                                          CobranzaTheme
-                                                              .fontName,
+                                                      fontFamily: CobranzaTheme
+                                                          .fontName,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       fontSize: 16,
@@ -230,16 +229,23 @@ class CobranzaView extends StatelessWidget {
                                         ),
                                         border: new Border.all(
                                             width: 4,
-                                            color: CobranzaTheme
-                                                .nearlyDarkBlue
+                                            color: CobranzaTheme.nearlyDarkBlue
                                                 .withOpacity(0.2)),
                                       ),
-                                      child: Column(
+                                      child: FloatingActionButton(
+                                        backgroundColor: Colors.redAccent,
+                                        //elevation: 0,
+                                        onPressed: () => {
+                                          //print(data.totalVenta.toString())
+                                        },
+                                      ),
+                                      /*child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
+
                                           Text(
                                             data.totalVenta != null
                                                 ? data.totalVenta.toString()
@@ -251,8 +257,8 @@ class CobranzaView extends StatelessWidget {
                                               fontWeight: FontWeight.normal,
                                               fontSize: 24,
                                               letterSpacing: 0.0,
-                                              color: CobranzaTheme
-                                                  .nearlyDarkBlue,
+                                              color:
+                                                  CobranzaTheme.nearlyDarkBlue,
                                             ),
                                           ),
                                           Text(
@@ -269,7 +275,7 @@ class CobranzaView extends StatelessWidget {
                                             ),
                                           ),
                                         ],
-                                      ),
+                                      ),*/
                                     ),
                                   ),
                                   Padding(

@@ -106,9 +106,6 @@ class _CobranzaDrawerState extends State<CobranzaDrawer>
         controller: scrollController,
         scrollDirection: Axis.horizontal,
         physics: const PageScrollPhysics(parent: ClampingScrollPhysics()),
-        // scrolloffset == 1.0
-        //     ? PageScrollPhysics(parent: ClampingScrollPhysics())
-        //     : PageScrollPhysics(parent: NeverScrollableScrollPhysics()),
         child: Opacity(
           opacity: isSetDawer ? 1 : 0,
           child: SizedBox(
@@ -116,7 +113,7 @@ class _CobranzaDrawerState extends State<CobranzaDrawer>
             width: MediaQuery.of(context).size.width + widget.drawerWidth,
             child: Row(
               children: <Widget>[
-                SizedBox(
+        /*        SizedBox(
                   width: widget.drawerWidth,
                   height: MediaQuery.of(context).size.height,
                   child: AnimatedBuilder(
@@ -144,7 +141,7 @@ class _CobranzaDrawerState extends State<CobranzaDrawer>
                       );
                     },
                   ),
-                ),
+                ),*/
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,

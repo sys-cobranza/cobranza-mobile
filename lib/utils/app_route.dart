@@ -1,5 +1,5 @@
+import 'package:cobranza/screens/home_screen.dart';
 import 'package:cobranza/screens/login_screen.dart';
-import 'package:cobranza/screens/navigation_screen.dart';
 import 'package:cobranza/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +13,11 @@ class AppRoute extends NavigatorObserver {
   static final Map<String, WidgetBuilder> _routes = {
     SplashPage.ROUTE_NAME: (_) => SplashPage(),
     LoginPage.ROUTE_NAME: (_) => LoginPage(),
-    NavigationScreen.ROUTE_NAME: (_) => NavigationScreen(),
+    HomeScreen.ROUTE_NAME: (_) => HomeScreen(),
   };
 
   Map<String, WidgetBuilder> get routes => _routes;
+
 
   @override
   void didStartUserGesture(
@@ -45,27 +46,6 @@ class AppRoute extends NavigatorObserver {
   }
 
   void setPreferredOrientations(RouteSettings settings) {
-    /*
-    if(targetName == "/") {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
-      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-    } else if(CategoryPage.routeName == targetName) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-      SystemChrome.setEnabledSystemUIOverlays([]);
-    } else if(DetailPage.routeName == targetName) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-      SystemChrome.setEnabledSystemUIOverlays([]);
-    }
-    */
   }
 }
 
